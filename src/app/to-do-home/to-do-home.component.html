@@ -1,0 +1,108 @@
+<div>
+  <mat-toolbar color="primary">
+    <span>To Do App</span>
+  </mat-toolbar>
+
+  <div style="text-align:center;">
+    <section style='display: inline-block; vertical-align: top;'>
+      <form class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>What to do?</mat-label>
+          <input matInput placeholder="Task 1" [(ngModel)]="newTask" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+      </form>
+    </section>
+
+    <section class="example-button-row" style='display: inline-block; vertical-align: top;'>
+      <button mat-raised-button color="accent" (click)="createNewTask()">Submit</button>
+    </section>
+
+  </div>
+
+  <!-- <div style="display:flex;">
+    <section>
+      <mat-accordion>
+        <mat-expansion-panel
+          (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title> Self aware panel </mat-panel-title>
+            <mat-panel-description>
+              Currently I am {{ panelOpenState ? "open" : "closed" }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>I'm visible because I am open</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </section>
+
+    <section>
+      <mat-accordion>
+        <mat-expansion-panel
+          (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title> Self aware panel </mat-panel-title>
+            <mat-panel-description>
+              Currently I am {{ panelOpenState ? "open" : "closed" }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>I'm visible because I am open</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </section>
+  </div> -->
+
+  <div style="display:flex;" cdkDropListGroup>
+    <mat-card class="list-card">
+      <mat-card-header>
+        <mat-card-title>To Do's</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-selection-list id="todo-drop-list" cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="taskList"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)">
+          <mat-list-option *ngFor="let task of taskList" [(selected)]="task.is_selected"
+           cdkDrag [cdkDragDisabled]="task.is_selected" [cdkDragData]="task"
+            >
+            {{task.task_name}}
+          </mat-list-option>
+        </mat-selection-list>
+        <!-- <mat-list id="todo-drop-list" cdkDropList
+            #todoList="cdkDropList"
+            [cdkDropListData]="taskList"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+          <mat-list-item *ngFor="let task of taskList"
+           cdkDrag [cdkDragDisabled]="task.is_selected" [disableRipple]="true" [cdkDragData]="task">
+            {{task.task_name}}
+            <p><mat-checkbox [ngModel]="task.is_selected" (click)="task.is_selected=!task.is_selected"
+              (click)="toggleSelection(task)"></mat-checkbox></p>
+          </mat-list-item>
+        </mat-list> -->
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="list-card">
+      <mat-card-header>
+        <mat-card-title>Selected To Do's</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list id="selectedtodo-drop-list"
+            cdkDropList
+            #todoList="cdkDropList"
+            [cdkDropListData]="selectedTaskList"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+          <mat-list-item *ngFor="let selectedTask of selectedTaskList" cdkDrag [cdkDragData]="selectedTask">
+            {{selectedTask.task_name}}
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

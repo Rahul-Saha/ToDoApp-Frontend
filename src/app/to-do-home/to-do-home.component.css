@@ -1,0 +1,39 @@
+.main-div{
+  min-height: 100vh;
+  min-width: 100vw;
+}
+.header {
+  background-color:#3f51b5;
+  color:#fff;
+  font-size: 35px;
+  padding: 5px;
+  /* margin: -10px */
+}
+.body-div {
+  min-width: 100%;
+  min-height: 70%
+}
+/* .todo-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+} */
+
+.example-full-width {
+  width: 100%;
+}
+
+.example-button-row .mat-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.list-card {
+  min-width: 400px;
+  max-width: 400px;
+  margin: 10%;
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
