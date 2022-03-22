@@ -122,7 +122,7 @@ export class ToDoHomeComponent implements OnInit {
   getAllTasks(): void {
     this._todoApi.getAllTasks().subscribe((response) => {
       if (response.success) {
-        console.log("getAllTasks : ",response);
+        // console.log("getAllTasks : ",response);
         this.taskList = response.data;
         // console.log(typeof(response));
         // console.log(typeof(this.taskList));
