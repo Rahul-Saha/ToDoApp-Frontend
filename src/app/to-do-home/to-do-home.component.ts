@@ -36,85 +36,56 @@ export class ToDoHomeComponent implements OnInit {
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      if (event.container.id === "selectedtodo-drop-list") {
-        console.log(event.container.id)
-        event.item.data.is_selected = true;
-        console.log(event.item.data);
-        this.updateSelectionStatus(event.item.data);
-        this.getAllTasks();
-        this.getSelectedTasks();
-        // copyArrayItem(
-        //   event.previousContainer.data,
-        //   event.container.data,
-        //   event.previousIndex,
-        //   event.currentIndex,
-        // );
-        // event.container.
-        // this.selectedTaskList=this.selectedTaskList.filter((item, pos) =>{
-        //   return this.selectedTaskList.indexOf(item)== pos;
-        // });
+      let trimmedList: Task[] = []
+      if (event.currentIndex < event.previousIndex) {
+        trimmedList = event.container.data.slice(event.currentIndex,event.previousIndex+1);
+        for (let i=0; i<trimmedList.length; i++) {
+          trimmedList[i].display_order = event.currentIndex + i + 1;
+        }
       } else {
-        console.log(event.container.id);
-        console.log(event.item.data);
-        event.item.data.is_selected = false;
-        console.log(event.item.data);
-        this.updateSelectionStatus(event.item.data);
-        this.getAllTasks();
-        this.getSelectedTasks();
+        trimmedList = event.container.data.slice(event.previousIndex, event.currentIndex+1);
+        for (let i=0; i<trimmedList.length; i++) {
+          trimmedList[i].display_order = event.previousIndex + i + 1;
+        }
       }
+      // console.log(trimmedList);
+      this.updateDisplayOrder(trimmedList);
 
+      // console.log(trimmedList)
+      return;
     }
+    event.item.data.is_selected = event.container.id === "selectedtodo-drop-list" ? true : false;
+    this.updateSelectionStatus(event.item.data);
 
   }
 
-  // drop(event: CdkDragDrop<Task[]>) {
-  //   console.log(this.taskList[event.previousIndex])
-  //   this.taskList[event.previousIndex].is_selected = true;
-  //   console.log(this.taskList[event.previousIndex])
-  //   var self=this;
-  //   if (event.previousContainer === event.container) {
-  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  //   }
-  //   else if(event.container.id<event.previousContainer.id){
-  //     copyArrayItem(event.previousContainer.data,
-  //                       event.container.data,
-  //                       event.previousIndex,
-  //                       event.currentIndex);
-
-  //      this.taskList=this.taskList.filter(function(item, pos){
-  //         return self.taskList.indexOf(item)== pos;
-  //       });
-  //   }
-  //   else {
-  //     copyArrayItem(event.previousContainer.data,
-  //                       event.container.data,
-  //                       event.previousIndex,
-  //                       event.currentIndex);
-  //     this.selectedTaskList=this.selectedTaskList.filter(function(item, pos){
-  //       return self.selectedTaskList.indexOf(item)== pos;
-  //     });
-  //   }
-  // }
-
-  toggleSelection(task: any): void {
-    console.log(task);
-    // task.is_selected = !task.is_selected;
-    // console.log(task);
-  }
-
-  updateSelectionStatus(task: Task[]): void {
-    console.log(task);
-    this._todoApi.updateSelectionStatus(task).subscribe((response) => {
+  updateDisplayOrder(trimmedList: Task[]): void {
+    this._todoApi.updateDisplayOrder(trimmedList).subscribe((response) => {
       if (response.success) {
-        console.log("Selection : ",response);
-        // this.taskList = response;
-        // console.log(typeof(response));
-        // console.log(typeof(this.taskList));
-        // console.table(this.taskList);
+        // console.log("Updated Order : ",response.data);
+        this.getSelectedTasks();
       }
       else {
-        console.log("Selection Error: ",response);
+        console.log("Selection Error: ",response.data);
+      }
+    })
+  }
+
+  toggleSelection(task: Task): void {
+    task.is_selected = !task.is_selected;
+    this.updateSelectionStatus(task);
+  }
+
+  updateSelectionStatus(task: Task): void {
+    // console.log(task);
+    this._todoApi.updateSelectionStatus(task).subscribe((response) => {
+      if (response.success) {
+        // console.log("Selection : ",response.data);
+        this.getAllTasks();
+        this.getSelectedTasks();
+      }
+      else {
+        console.log("Selection Error: ",response.data);
       }
     })
   }
@@ -122,11 +93,8 @@ export class ToDoHomeComponent implements OnInit {
   getAllTasks(): void {
     this._todoApi.getAllTasks().subscribe((response) => {
       if (response.success) {
-        // console.log("getAllTasks : ",response);
+        // console.log("getAllTasks : ",response.data);
         this.taskList = response.data;
-        // console.log(typeof(response));
-        // console.log(typeof(this.taskList));
-        // console.table(this.taskList);
       }
       else {
         console.log("getAllTasks Error: ",response.data);
@@ -137,9 +105,8 @@ export class ToDoHomeComponent implements OnInit {
   getSelectedTasks(): void {
     this._todoApi.getSelectedTasks().subscribe((response) => {
       if (response.success) {
-        console.log("getSelectedTasks : ",response);
+        // console.log("getSelectedTasks : ",response.data);
         this.selectedTaskList = response.data;
-        // console.table(this.selectedTaskList);
       }
       else {
         console.log("getAllTasks Error: ",response.data);
@@ -151,7 +118,8 @@ export class ToDoHomeComponent implements OnInit {
     console.log(this.newTask);
     this._todoApi.addNewTask(this.newTask).subscribe((response) => {
       if (response.success) {
-        console.log('New Task: ', response.data);
+        this.newTask = "";
+        // console.log('New Task: ', response.data);
         this.getAllTasks();
       }
       else {

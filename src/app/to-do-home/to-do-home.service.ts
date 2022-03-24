@@ -31,8 +31,13 @@ export class ToDoHomeService {
     return this._http.post(this.baseUrl + 'addNewTask/', body, { headers: this.httpHeaders });
   }
 
-  updateSelectionStatus(task: Task[]): Observable<any> {
+  updateSelectionStatus(task: Task): Observable<any> {
     console.log(task);
     return this._http.patch(this.baseUrl + 'updateSelectionStatus/', task, { headers: this.httpHeaders });
+  }
+
+  updateDisplayOrder(taskList: Task[]): Observable<any> {
+    console.log(taskList);
+    return this._http.patch(this.baseUrl + 'updateDisplayOrder/', taskList, { headers: this.httpHeaders });
   }
 }

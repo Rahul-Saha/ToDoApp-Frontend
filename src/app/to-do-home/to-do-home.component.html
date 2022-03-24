@@ -60,30 +60,30 @@
       <mat-card-header>
         <mat-card-title>To Do's</mat-card-title>
       </mat-card-header>
-      <mat-card-content>
-        <mat-selection-list id="todo-drop-list" cdkDropList
+      <mat-card-content id="todo-drop-list" cdkDropList
         #todoList="cdkDropList"
         [cdkDropListData]="taskList"
         class="example-list"
         (cdkDropListDropped)="drop($event)">
+        <!-- <mat-selection-list>
           <mat-list-option *ngFor="let task of taskList" [(selected)]="task.is_selected"
-           cdkDrag [cdkDragDisabled]="task.is_selected" [cdkDragData]="task"
-            >
+           cdkDrag [cdkDragDisabled]="task.is_selected" [cdkDragData]="task">
             {{task.task_name}}
           </mat-list-option>
-        </mat-selection-list>
-        <!-- <mat-list id="todo-drop-list" cdkDropList
-            #todoList="cdkDropList"
-            [cdkDropListData]="taskList"
-            class="example-list"
-            (cdkDropListDropped)="drop($event)">
-          <mat-list-item *ngFor="let task of taskList"
-           cdkDrag [cdkDragDisabled]="task.is_selected" [disableRipple]="true" [cdkDragData]="task">
+        </mat-selection-list> -->
+        <mat-list>
+          <mat-list-item style="width: 100%;"
+            *ngFor="let task of taskList"
+            cdkDrag  [cdkDragData]="task">
+            <mat-checkbox [checked]="task.is_selected" (click)="toggleSelection(task)"
+              style="margin-right: 2em;">
+            </mat-checkbox>
             {{task.task_name}}
-            <p><mat-checkbox [ngModel]="task.is_selected" (click)="task.is_selected=!task.is_selected"
-              (click)="toggleSelection(task)"></mat-checkbox></p>
+            <!-- <button mat-icon-button style="margin-left: 10em;">
+              <mat-icon>more_vert</mat-icon>
+            </button> -->
           </mat-list-item>
-        </mat-list> -->
+        </mat-list>
       </mat-card-content>
     </mat-card>
 
@@ -91,13 +91,13 @@
       <mat-card-header>
         <mat-card-title>Selected To Do's</mat-card-title>
       </mat-card-header>
-      <mat-card-content>
-        <mat-list id="selectedtodo-drop-list"
-            cdkDropList
-            #todoList="cdkDropList"
-            [cdkDropListData]="selectedTaskList"
-            class="example-list"
-            (cdkDropListDropped)="drop($event)">
+      <mat-card-content id="selectedtodo-drop-list"
+        cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="selectedTaskList"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)">
+        <mat-list>
           <mat-list-item *ngFor="let selectedTask of selectedTaskList" cdkDrag [cdkDragData]="selectedTask">
             {{selectedTask.task_name}}
           </mat-list-item>
