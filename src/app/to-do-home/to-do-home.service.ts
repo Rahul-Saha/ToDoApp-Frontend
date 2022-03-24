@@ -8,7 +8,8 @@ import { Task } from '../interfaces/task';
 })
 export class ToDoHomeService {
 
-  baseUrl = 'http://localhost:8080/'
+  // baseUrl = 'http://localhost:8080/'
+  baseUrl = 'https://evening-lake-44734.herokuapp.com/'
   httpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
   })
